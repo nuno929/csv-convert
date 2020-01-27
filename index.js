@@ -15,7 +15,7 @@ const csvParser = require('csv')
 
 // 出力のロジック
 const exportCsv = (data) => {
-  csvParser.stringify(data, (error, rawOutput) => {
+  csvParser.stringify(data, { quoted: true }, (error, rawOutput) => {
     const outputCsv = commander.outputCsv || 'output.csv'
     const output = iconv.encode(rawOutput, "Shift_JIS")
     fileStream.writeFile(outputCsv, output, (error) => {
@@ -40,16 +40,17 @@ const convertRow = (row) => {
   config.outputSettings.columns.forEach(column => {
     let value = null
 
-    if ('default' in column) {
-      value = column.default
-    }
-
     if ('from' in column) {
       value = row[column.from]
     }
 
     if ('convert' in column) {
       value = column.convert(value)
+    }
+
+    
+    if (!value && 'default' in column) {
+      value = column.default
     }
 
     newRow.push(value)
