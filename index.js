@@ -16,7 +16,7 @@ const csvParser = require('csv')
 // 出力のロジック
 const exportCsv = (data) => {
   csvParser.stringify(data, (error, rawOutput) => {
-    const outputCsv = commander.outpuCsv || 'output.csv'
+    const outputCsv = commander.outputCsv || 'output.csv'
     const output = iconv.encode(rawOutput, "Shift_JIS")
     fileStream.writeFile(outputCsv, output, (error) => {
       if (error) {
